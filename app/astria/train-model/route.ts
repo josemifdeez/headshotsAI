@@ -144,10 +144,10 @@ export async function POST(request: Request) {
 
   try {
 
-    const trainWebhook = `https://fotosia.vercel.app/astria/train-webhook`;
+    const trainWebhook = `https://www.sesionesfotosia.com/astria/train-webhook`;
     const trainWebhookWithParams = `${trainWebhook}?user_id=${user.id}&model_id=${modelId}&webhook_secret=${appWebhookSecret}`;
 
-    const promptWebhook = `https://fotosia.vercel.app/astria/prompt-webhook`;
+    const promptWebhook = `https://www.sesionesfotosia.com/astria/prompt-webhook`;
     const promptWebhookWithParams = `${promptWebhook}?user_id=${user.id}&&model_id=${modelId}&webhook_secret=${appWebhookSecret}`;
 
     const API_KEY = astriaApiKey;
