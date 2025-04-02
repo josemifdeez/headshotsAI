@@ -231,7 +231,7 @@ export default function NavbarInteractive() {
                                <>
                                 {isScrolled && (
                                    <div className="hidden lg:flex text-xs font-medium text-gray-500 border border-gray-200 rounded-full px-2.5 py-1 items-center gap-1">
-                                       ⚡️ <ClientSideCredits creditsRow={credits} simple />
+                                       {/* ⚡️ <ClientSideCredits creditsRow={credits} simple /> */}
                                    </div>
                                 )}
                                 {!isScrolled && (

@@ -2,8 +2,7 @@
 import Footer from "@/components/Footer";
 // --- IMPORTA AMBOS NAVBARS Y EL SWITCHER ---
 import Navbar from "@/components/Navbar";              // Tu Navbar original
-import NavbarModernV2 from "@/components/NavbarPill"; // Tu Navbar pill
-import NavbarSwitcher from "@/components/NavbarSwitcher"; // El componente switcher
+import NavbarModernV2 from "@/components/NavbarPill"; // Tu Navbar pill // El componente switcher
 // --- FIN IMPORTS ---
 import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";

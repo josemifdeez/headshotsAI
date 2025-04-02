@@ -1,3 +1,5 @@
+// ----- ARCHIVO: ./app/astria/train-webhook/route.ts -----
+
 import { Database } from "@/types/supabase";
 import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
@@ -31,7 +33,7 @@ if (!appWebhookSecret) {
 
 export async function POST(request: Request) {
   type TuneData = {
-    id: number;
+    id: number; // Astria tune ID (number)
     title: string;
     name: string;
     steps: null;
@@ -48,7 +50,7 @@ export async function POST(request: Request) {
 
   const urlObj = new URL(request.url);
   const user_id = urlObj.searchParams.get("user_id");
-  const model_id = urlObj.searchParams.get("model_id");
+  const model_id = urlObj.searchParams.get("model_id"); // Obtenido como string
   const webhook_secret = urlObj.searchParams.get("webhook_secret");
 
   if (!model_id) {
@@ -59,7 +61,7 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
-  
+
 
   if (!webhook_secret) {
     return NextResponse.json(
@@ -124,39 +126,57 @@ export async function POST(request: Request) {
   }
 
   try {
-    if (resendApiKey) {
-      const resend = new Resend(resendApiKey);
-      await resend.emails.send({
-        from: "noreply@headshots.tryleap.ai",
-        to: user?.email ?? "",
-        subject: "Your model was successfully trained!",
-        html: `<h2>We're writing to notify you that your model training was successful! 1 credit has been used from your account.</h2>`,
-      });
+    // --- NOTA: Considera verificar el estado actual del modelo antes de enviar el email ---
+    // Quizás ya estaba 'finished' por algún motivo.
+
+    if (resendApiKey && user?.email) { // Asegúrate de que el usuario tiene email
+      try {
+          const resend = new Resend(resendApiKey);
+          await resend.emails.send({
+            from: "noreply@headshots.tryleap.ai", // Cambia esto a tu dominio si lo tienes configurado
+            to: user.email,
+            subject: "¡Tu modelo de IA está listo!", // Asunto más amigable
+            // Email más informativo
+            html: `<h2>¡Buenas noticias!</h2><p>Tu modelo de IA '${tune.name || 'sin nombre'}' ha completado su entrenamiento.</p><p>Ya puedes empezar a generar imágenes. Se ha utilizado 1 crédito de tu cuenta para este entrenamiento.</p><p>¡Gracias por usar Sesiones Fotos IA!</p>`,
+          });
+          console.log(`Email notification sent successfully to ${user.email}`);
+      } catch (emailError) {
+          console.error("Error sending email notification:", emailError);
+          // Decide si quieres continuar aunque falle el email
+      }
     }
 
+    // --- CORRECCIÓN AQUÍ ---
     const { data: modelUpdated, error: modelUpdatedError } = await supabase
       .from("models")
       .update({
         modelId: `${tune.id}`,
         status: "finished",
       })
-      .eq("id", model_id)
-      .select();
+      .eq("id", Number(model_id)) // <--- Convertido a número
+      .select(); // Es bueno seleccionar para confirmar el cambio y loguear
+
 
     if (modelUpdatedError) {
-      console.error({ modelUpdatedError });
+      console.error("Error updating model status in DB:", { modelUpdatedError });
       return NextResponse.json(
         {
-          message: "Something went wrong!",
+          message: `Database error updating model: ${modelUpdatedError.message}`,
         },
         { status: 500 }
       );
     }
 
-    if (!modelUpdated) {
-      console.error("No model updated!");
-      console.error({ modelUpdated });
+    if (!modelUpdated || modelUpdated.length === 0) {
+      // Esto podría pasar si el model_id no existía o hubo un problema
+      console.error(`Failed to update model or model not found for id: ${model_id}`);
+      return NextResponse.json(
+        { message: `Model with id ${model_id} not found or failed to update.` },
+        { status: 404 } // O 500 si prefieres
+      );
     }
+
+    console.log("Model status updated successfully in DB:", modelUpdated);
 
     return NextResponse.json(
       {
@@ -165,7 +185,7 @@ export async function POST(request: Request) {
       { status: 200, statusText: "Success" }
     );
   } catch (e) {
-    console.error(e);
+    console.error("General error processing train webhook:", e);
     return NextResponse.json(
       {
         message: "Something went wrong!",

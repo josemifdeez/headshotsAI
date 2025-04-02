@@ -87,7 +87,7 @@ module.exports = {
   		},
   		fontFamily: {
   			euclid: [
-  				'Euclid Circular B"',
+  				'Euclid Circular B',
   				'sans-serif'
   			]
   		}

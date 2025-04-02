@@ -1,3 +1,5 @@
+// ----- ARCHIVO: ./app/astria/prompt-webhook/route.ts -----
+
 import { Database } from "@/types/supabase";
 import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
@@ -41,7 +43,7 @@ export async function POST(request: Request) {
     updated_at: string;
     images: string[];
   };
-  
+
   const incomingData = (await request.json()) as { prompt: PromptData };
 
   const { prompt } = incomingData;
@@ -50,7 +52,7 @@ export async function POST(request: Request) {
 
   const urlObj = new URL(request.url);
   const user_id = urlObj.searchParams.get("user_id");
-  const model_id = urlObj.searchParams.get("model_id");
+  const model_id = urlObj.searchParams.get("model_id"); // Obtenido como string
   const webhook_secret = urlObj.searchParams.get("webhook_secret");
 
   if (!model_id) {
@@ -60,7 +62,7 @@ export async function POST(request: Request) {
       },
       { status: 500 }
     );
-  }  
+  }
 
   if (!webhook_secret) {
     return NextResponse.json(
@@ -127,34 +129,44 @@ export async function POST(request: Request) {
   try {
     // Here we join all of the arrays into one.
     const allHeadshots = prompt.images;
-    
+
+    // --- CORRECCIÓN AQUÍ ---
+    // Convertimos model_id a número antes de usarlo en la consulta
     const { data: model, error: modelError } = await supabase
       .from("models")
       .select("*")
-      .eq("id", model_id)
+      .eq("id", Number(model_id)) // Convertido a número
       .single();
+    // --- FIN CORRECCIÓN ---
 
     if (modelError) {
       console.error({ modelError });
+      // Podrías querer devolver un error más específico si model_id no era un número válido
+      // o si el modelo no se encontró.
       return NextResponse.json(
         {
-          message: "Something went wrong!",
+          message: `Error finding model: ${modelError.message}`,
         },
         { status: 500 }
       );
     }
 
+    // Si model se encontró, model.id ya será un número (según tu schema de Supabase)
     await Promise.all(
       allHeadshots.map(async (image) => {
         const { error: imageError } = await supabase.from("images").insert({
-          modelId: Number(model.id),
+          modelId: model.id, // Usamos directamente model.id
           uri: image,
         });
         if (imageError) {
-          console.error({ imageError });
+          console.error("Error inserting image:", { imageError, imageUri: image, modelId: model.id });
         }
       })
     );
+
+    // Considera también actualizar el estado del modelo aquí si es necesario
+    // Ejemplo: await supabase.from("models").update({ status: 'completed' }).eq("id", model.id);
+
     return NextResponse.json(
       {
         message: "success",
@@ -162,7 +174,7 @@ export async function POST(request: Request) {
       { status: 200, statusText: "Success" }
     );
   } catch (e) {
-    console.error(e);
+    console.error("General error processing webhook:", e);
     return NextResponse.json(
       {
         message: "Something went wrong!",
