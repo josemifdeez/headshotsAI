@@ -23,14 +23,13 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { FaFemale, FaImages, FaMale, FaRainbow } from "react-icons/fa";
 import * as z from "zod";
 import { fileUploadFormSchema } from "@/types/zod";
 import { upload } from "@vercel/blob/client";
-import axios from "axios";
 
 type FormInput = z.infer<typeof fileUploadFormSchema>;
 
@@ -61,36 +60,36 @@ export default function TrainModelZone({ packSlug }: { packSlug: string }) {
           (file: File) => !files.some((f) => f.name === file.name)
         ) || [];
 
-      // if user tries to upload more than 10 files, display a toast
+      // si el usuario intenta subir más de 10 archivos
       if (newFiles.length + files.length > 10) {
         toast({
-          title: "Too many images",
+          title: "Demasiadas imágenes",
           description:
-            "You can only upload up to 10 images in total. Please try again.",
+            "Solo puedes subir hasta 10 imágenes en total. Inténtalo de nuevo.",
           duration: 5000,
         });
         return;
       }
 
-      // display a toast if any duplicate files were found
+      // si se encontraron archivos duplicados
       if (newFiles.length !== acceptedFiles.length) {
         toast({
-          title: "Duplicate file names",
+          title: "Archivos duplicados",
           description:
-            "Some of the files you selected were already added. They were ignored.",
+            "Algunos archivos que seleccionaste ya estaban añadidos. Se han ignorado.",
           duration: 5000,
         });
       }
 
-      // check that in total images do not exceed a combined 4.5MB
+      // comprobar que el tamaño total combinado no supere 4.5MB
       const totalSize = files.reduce((acc, file) => acc + file.size, 0);
       const newSize = newFiles.reduce((acc, file) => acc + file.size, 0);
 
       if (totalSize + newSize > 4.5 * 1024 * 1024) {
         toast({
-          title: "Images exceed size limit",
+          title: "Las imágenes exceden el límite de tamaño",
           description:
-            "The total combined size of the images cannot exceed 4.5MB.",
+            "El tamaño combinado de las imágenes no puede superar los 4.5MB.",
           duration: 5000,
         });
         return;
@@ -99,8 +98,8 @@ export default function TrainModelZone({ packSlug }: { packSlug: string }) {
       setFiles([...files, ...newFiles]);
 
       toast({
-        title: "Images selected",
-        description: "The images were successfully selected.",
+        title: "Imágenes seleccionadas",
+        description: "Las imágenes se han seleccionado correctamente.",
         duration: 5000,
       });
     },
@@ -116,7 +115,6 @@ export default function TrainModelZone({ packSlug }: { packSlug: string }) {
 
   const trainModel = useCallback(async () => {
     setIsLoading(true);
-    // Upload each file to Vercel blob and store the resulting URLs
     const blobUrls = [];
 
     if (files) {
@@ -129,16 +127,13 @@ export default function TrainModelZone({ packSlug }: { packSlug: string }) {
       }
     }
 
-    // console.log(blobUrls, "blobUrls");
-
     const payload = {
       urls: blobUrls,
       name: form.getValues("name").trim(),
       type: form.getValues("type"),
-      pack: packSlug
+      pack: packSlug,
     };
 
-    // Send the JSON payload to the "/astria/train-model" endpoint
     const response = await fetch("/astria/train-model", {
       method: "POST",
       headers: {
@@ -152,17 +147,19 @@ export default function TrainModelZone({ packSlug }: { packSlug: string }) {
     if (!response.ok) {
       const responseData = await response.json();
       const responseMessage: string = responseData.message;
-      console.error("Something went wrong! ", responseMessage);
+      console.error("Algo salió mal: ", responseMessage);
+
       const messageWithButton = (
         <div className="flex flex-col gap-4">
           {responseMessage}
           <a href="/get-credits">
-            <Button size="sm">Get Credits</Button>
+            <Button size="sm">Obtener créditos</Button>
           </a>
         </div>
       );
+
       toast({
-        title: "Something went wrong!",
+        title: "¡Algo salió mal!",
         description: responseMessage.includes("Not enough credits")
           ? messageWithButton
           : responseMessage,
@@ -172,9 +169,9 @@ export default function TrainModelZone({ packSlug }: { packSlug: string }) {
     }
 
     toast({
-      title: "Model queued for training",
+      title: "Modelo en cola de entrenamiento",
       description:
-        "The model was queued for training. You will receive an email when the model is ready to use.",
+        "El modelo ha sido puesto en cola. Recibirás un email cuando esté listo.",
       duration: 5000,
     });
 
@@ -203,13 +200,13 @@ export default function TrainModelZone({ packSlug }: { packSlug: string }) {
             name="name"
             render={({ field }) => (
               <FormItem className="w-full rounded-md">
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Nombre</FormLabel>
                 <FormDescription>
-                  Give your model a name so you can easily identify it later.
+                  Ponle un nombre a tu modelo para identificarlo fácilmente más adelante.
                 </FormDescription>
                 <FormControl>
                   <Input
-                    placeholder="e.g. Natalie Headshots"
+                    placeholder="Ej: Fotos de Alejandra"
                     {...field}
                     className="max-w-screen-sm"
                     autoComplete="off"
@@ -219,10 +216,11 @@ export default function TrainModelZone({ packSlug }: { packSlug: string }) {
               </FormItem>
             )}
           />
+
           <div className="flex flex-col gap-4">
-            <FormLabel>Type</FormLabel>
+            <FormLabel>Género</FormLabel>
             <FormDescription>
-              Select the type of headshots you want to generate.
+              Selecciona el género de las fotos que deseas generar.
             </FormDescription>
             <RadioGroup
               defaultValue={modelType}
@@ -244,7 +242,7 @@ export default function TrainModelZone({ packSlug }: { packSlug: string }) {
                   className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
                 >
                   <FaMale className="mb-3 h-6 w-6" />
-                  Man
+                  Hombre
                 </Label>
               </div>
 
@@ -260,7 +258,7 @@ export default function TrainModelZone({ packSlug }: { packSlug: string }) {
                   className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
                 >
                   <FaFemale className="mb-3 h-6 w-6" />
-                  Woman
+                  Mujer
                 </Label>
               </div>
               <div>
@@ -280,29 +278,30 @@ export default function TrainModelZone({ packSlug }: { packSlug: string }) {
               </div>
             </RadioGroup>
           </div>
+
           <div
             {...getRootProps()}
-            className=" rounded-md justify-center align-middle cursor-pointer flex flex-col gap-4"
+            className="rounded-md justify-center align-middle cursor-pointer flex flex-col gap-4"
           >
-            <FormLabel>Samples</FormLabel>
+            <FormLabel>Muestras</FormLabel>
             <FormDescription>
-              Upload 4-10 images of the person you want to generate headshots
-              for.
+              Sube entre 4 y 10 imágenes de la persona para la que deseas generar retratos.
             </FormDescription>
             <div className="outline-dashed outline-2 outline-gray-100 hover:outline-blue-500 w-full h-full rounded-md p-4 flex justify-center align-middle">
               <input {...getInputProps()} />
               {isDragActive ? (
-                <p className="self-center">Drop the files here ...</p>
+                <p className="self-center">Suelta los archivos aquí...</p>
               ) : (
                 <div className="flex justify-center flex-col items-center gap-2">
                   <FaImages size={32} className="text-gray-700" />
                   <p className="self-center">
-                    Drag 'n' drop some files here, or click to select files.
+                    Arrastra y suelta tus imágenes aquí, o haz clic para seleccionarlas.
                   </p>
                 </div>
               )}
             </div>
           </div>
+
           {files.length > 0 && (
             <div className="flex flex-row gap-4 flex-wrap">
               {files.map((file) => (
@@ -313,11 +312,11 @@ export default function TrainModelZone({ packSlug }: { packSlug: string }) {
                   />
                   <Button
                     variant="outline"
-                    size={"sm"}
+                    size="sm"
                     className="w-full"
                     onClick={() => removeFile(file)}
                   >
-                    Remove
+                    Eliminar
                   </Button>
                 </div>
               ))}
@@ -325,8 +324,7 @@ export default function TrainModelZone({ packSlug }: { packSlug: string }) {
           )}
 
           <Button type="submit" className="w-full" isLoading={isLoading}>
-            Train Model{" "}
-            {stripeIsConfigured && <span className="ml-1">(1 Credit)</span>}
+            Entrenar modelo {stripeIsConfigured && <span className="ml-1">(1 Crédito)</span>}
           </Button>
         </form>
       </Form>

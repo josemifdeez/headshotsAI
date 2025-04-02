@@ -1,77 +1,96 @@
 import Link from "next/link";
+import { Instagram, Linkedin } from "lucide-react"; // Mantengo la opción de Lucide comentada
 
-export default function Footer() {
+// Datos de los enlaces sociales (sin cambios)
+const socialLinks = [
+  {
+    href: "https://instagram.com/SesionesFotosIA",
+    label: "Instagram",
+    icon: (
+      <svg /* Tu SVG de Instagram */
+        xmlns="http://www.w3.org/2000/svg"
+        shapeRendering="geometricPrecision"
+        textRendering="geometricPrecision"
+        imageRendering="optimizeQuality"
+        fillRule="evenodd"
+        clipRule="evenodd"
+        viewBox="0 0 512 512"
+        className="h-5 w-5 transition-colors duration-300 ease-out"
+      >
+        <path fillRule="nonzero" d="M170.663 256.157c-.083-47.121 38.055-85.4 85.167-85.482 47.121-.092 85.407 38.029 85.499 85.159.091 47.13-38.047 85.4-85.176 85.492-47.112.09-85.399-38.039-85.49-85.169zm-46.108.092c.141 72.602 59.106 131.327 131.69 131.185 72.592-.14 131.35-59.089 131.209-131.691-.141-72.577-59.114-131.336-131.715-131.194-72.585.141-131.325 59.114-131.184 131.7zm237.104-137.092c.033 16.954 13.817 30.682 30.772 30.649 16.961-.034 30.689-13.811 30.664-30.765-.033-16.954-13.818-30.69-30.78-30.656-16.962.033-30.689 13.818-30.656 30.772zm-208.696 345.4c-24.958-1.086-38.511-5.234-47.543-8.709-11.961-4.628-20.496-10.177-29.479-19.093-8.966-8.951-14.532-17.461-19.202-29.397-3.508-9.033-7.73-22.569-8.9-47.527-1.269-26.983-1.559-35.078-1.683-103.433-.133-68.338.116-76.434 1.294-103.441 1.069-24.941 5.242-38.512 8.709-47.536 4.628-11.977 10.161-20.496 19.094-29.478 8.949-8.983 17.459-14.532 29.403-19.202 9.025-3.526 22.561-7.715 47.511-8.9 26.998-1.278 35.085-1.551 103.423-1.684 68.353-.133 76.448.108 103.456 1.294 24.94 1.086 38.51 5.217 47.527 8.709 11.968 4.628 20.503 10.145 29.478 19.094 8.974 8.95 14.54 17.443 19.21 29.413 3.524 8.999 7.714 22.552 8.892 47.494 1.285 26.998 1.576 35.094 1.7 103.432.132 68.355-.117 76.451-1.302 103.442-1.087 24.957-5.226 38.52-8.709 47.56-4.629 11.953-10.161 20.488-19.103 29.471-8.941 8.949-17.451 14.531-29.403 19.201-9.009 3.517-22.561 7.714-47.494 8.9-26.998 1.269-35.086 1.56-103.448 1.684-68.338.133-76.424-.124-103.431-1.294zM149.977 1.773c-27.239 1.286-45.843 5.648-62.101 12.019-16.829 6.561-31.095 15.353-45.286 29.603C28.381 57.653 19.655 71.944 13.144 88.79c-6.303 16.299-10.575 34.912-11.778 62.168C.172 178.264-.102 186.973.031 256.489c.133 69.508.439 78.234 1.741 105.548 1.302 27.231 5.649 45.827 12.019 62.092 6.569 16.83 15.353 31.089 29.611 45.289 14.25 14.2 28.55 22.918 45.404 29.438 16.282 6.294 34.902 10.583 62.15 11.777 27.305 1.203 36.022 1.468 105.521 1.336 69.532-.133 78.25-.44 105.555-1.734 27.239-1.302 45.826-5.664 62.1-12.019 16.829-6.585 31.095-15.353 45.288-29.611 14.191-14.251 22.917-28.55 29.428-45.404 6.304-16.282 10.592-34.904 11.777-62.134 1.195-27.323 1.478-36.049 1.344-105.557-.133-69.516-.447-78.225-1.741-105.522-1.294-27.256-5.657-45.844-12.019-62.118-6.577-16.829-15.352-31.08-29.602-45.288-14.25-14.192-28.55-22.935-45.404-29.429-16.29-6.304-34.903-10.6-62.15-11.778C333.747.164 325.03-.101 255.506.031c-69.507.133-78.224.431-105.529 1.742z" />
+      </svg>
+    ),
+  },
+  {
+    href: "https://tiktok.com/@SesionesFotosIA",
+    label: "TikTok",
+    icon: (
+      <svg /* Tu SVG de TikTok */
+        xmlns="http://www.w3.org/2000/svg"
+        shapeRendering="geometricPrecision"
+        textRendering="geometricPrecision"
+        imageRendering="optimizeQuality"
+        fillRule="evenodd"
+        clipRule="evenodd"
+        viewBox="0 0 449.45 515.38"
+        className="h-5 w-5 transition-colors duration-300 ease-out"
+      >
+        <path fillRule="nonzero" d="M382.31 103.3c-27.76-18.1-47.79-47.07-54.04-80.82-1.35-7.29-2.1-14.8-2.1-22.48h-88.6l-.15 355.09c-1.48 39.77-34.21 71.68-74.33 71.68-12.47 0-24.21-3.11-34.55-8.56-23.71-12.47-39.94-37.32-39.94-65.91 0-41.07 33.42-74.49 74.48-74.49 7.67 0 15.02 1.27 21.97 3.44V190.8c-7.2-.99-14.51-1.59-21.97-1.59C73.16 189.21 0 262.36 0 352.3c0 55.17 27.56 104 69.63 133.52 26.48 18.61 58.71 29.56 93.46 29.56 89.93 0 163.08-73.16 163.08-163.08V172.23c34.75 24.94 77.33 39.64 123.28 39.64v-88.61c-24.75 0-47.8-7.35-67.14-19.96z" />
+      </svg>
+    ),
+  },
+  // {
+  //   href: "https://linkedin.com/company/...",
+  //   label: "LinkedIn",
+  //   icon: <Linkedin className="h-5 w-5" /> // Ejemplo con Lucide
+  // }
+];
+
+export default function ModernFooterMinimalOriginalSpacing() { // Nombre ajustado levemente
   return (
-    <footer className="text-center px-4 lg:px-40 py-4 h-12 sm:h-20 w-full sm:pt-2 pt-4 border-t mt-5 flex sm:flex-row flex-col justify-between items-center space-y-3 sm:mb-0 mb-3 border-gray-200">
-      <div className="text-gray-500">
-        <Link
-          className="text-blue-600 hover:underline font-bold"
-          href="https://github.com/leap-ai/headshots-starter"
-          target="_blank"
-        >
-          Open-source
-        </Link>{" "}
-        powered by{" "}
-        <Link
-          className="text-blue-600 hover:underline font-bold"
-          href="https://www.astria.ai/"
-          target="_blank"
-        >
-          Astria,{" "}
-        </Link>
-        <Link
-          className="text-blue-600 hover:underline font-bold"
-          href="https://supabase.com/"
-          target="_blank"
-        >
-          Supabase,{" "}
-        </Link>
-        and{" "}
-        {process.env.DEPLOYMENT_PROVIDER === "replit" ? (
-          <Link
-            className="text-blue-600 hover:underline font-bold"
-            href="https://replit.com/@leap-ai/Headshot-AI-Professional-Headshots-with-Leap-AI"
-            target="_blank"
-          >
-            Replit{" "}
-          </Link>
-        ) : (
-          <Link
-            className="text-blue-600 hover:underline font-bold"
-            href="https://vercel.com/"
-            target="_blank"
-          >
-            Vercel.
-          </Link>
-        )}
-      </div>
-      <div className="flex space-x-4 pb-4 sm:pb-0">
-        <Link
-          href="https://twitter.com/Astria_AI"
-          className="group"
-          aria-label="Twitter"
-          target="_blank"
-        >
-          <svg
-            aria-hidden="true"
-            className="h-6 w-6 fill-gray-500 group-hover:fill-gray-300"
-          >
-            <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0 0 22 5.92a8.19 8.19 0 0 1-2.357.646 4.118 4.118 0 0 0 1.804-2.27 8.224 8.224 0 0 1-2.605.996 4.107 4.107 0 0 0-6.993 3.743 11.65 11.65 0 0 1-8.457-4.287 4.106 4.106 0 0 0 1.27 5.477A4.073 4.073 0 0 1 2.8 9.713v.052a4.105 4.105 0 0 0 3.292 4.022 4.093 4.093 0 0 1-1.853.07 4.108 4.108 0 0 0 3.834 2.85A8.233 8.233 0 0 1 2 18.407a11.615 11.615 0 0 0 6.29 1.84" />
-          </svg>
-        </Link>
-        <Link
-          href="https://github.com/leap-ai/headshots-starter"
-          className="group"
-          aria-label="GitHub"
-          target="_blank"
-        >
-          <svg
-            aria-hidden="true"
-            className="h-6 w-6 fill-gray-500 group-hover:fill-gray-300"
-          >
-            <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z" />
-          </svg>
-        </Link>
+    // --- CAMBIO CLAVE: Restaurado mt-5 ---
+    <footer className="border-t border-slate-200 mt-5 w-full"> {/* Mantenemos borde, sin fondo, ancho completo, margen superior original */}
+      <div className="max-w-7xl mx-auto px-6 md:px-8 py-6"> {/* Mantenemos padding reducido y alineación */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-6"> {/* Mantenemos gap reducido */}
+
+          {/* Sección Izquierda: Copyright (sin cambios) */}
+          <div className="text-center md:text-left text-sm text-gray-600 order-2 md:order-1">
+            <span>© {new Date().getFullYear()} </span>
+            <Link href="/" className="font-semibold text-gray-800 hover:text-[#4C66FE] transition-colors duration-200 ease-out">
+              Sesiones Fotos IA
+            </Link>
+            <span className="hidden sm:inline">. Todos los derechos reservados.</span>
+            {/* Opcional: Links de Términos/Privacidad */}
+            {/* <span className="mx-2 hidden md:inline">|</span>
+             <Link href="/terminos" className="hover:text-[#4C66FE] hover:underline transition-colors duration-200 ease-out">Términos</Link>
+             <span className="mx-1">·</span>
+             <Link href="/privacidad" className="hover:text-[#4C66FE] hover:underline transition-colors duration-200 ease-out">Privacidad</Link> */}
+          </div>
+
+          {/* Sección Derecha: Iconos Sociales (hover minimalista mantenido) */}
+          <div className="flex items-center space-x-3 order-1 md:order-2">
+            {socialLinks.map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="group p-2 rounded-full text-gray-500 transition-colors duration-300 ease-out hover:text-[#4C66FE]" // Sin fondo en hover
+                aria-label={link.label}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span className="[&>svg]:fill-current">
+                  {link.icon}
+                </span>
+                <span className="sr-only">{link.label}</span>
+              </Link>
+            ))}
+          </div>
+
+        </div>
+
+         {/* Opcional: Links de navegación adicionales (sin cambios) */}
+         {/* <nav className="mt-6 pt-6 border-t border-slate-200 flex flex-wrap justify-center gap-x-6 gap-y-4 text-sm text-gray-500"> ... </nav> */}
+
       </div>
     </footer>
   );

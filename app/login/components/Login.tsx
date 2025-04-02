@@ -102,19 +102,19 @@ export const Login = ({
     <>
       <div className="flex items-center justify-center p-8">
         <div className="flex flex-col gap-4 bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 p-4 rounded-xl max-w-sm w-full">
-          <h1 className="text-xl">Welcome</h1>
+          <h1 className="text-xl">Bienvenido</h1>
           <p className="text-xs opacity-60">
-            Sign in or create an account to get started.
+            Inicia sesión o crea una cuenta para comenzar.
           </p>
-          {/* <Button
+          <Button
             onClick={signInWithGoogle}
             variant={"outline"}
             className="font-semibold"
           >
             <AiOutlineGoogle size={20} />
-            Continue with Google
+            Continuar con Google
           </Button>
-          <OR /> */}
+          <OR />
 
           <form
             onSubmit={handleSubmit(onSubmit)}
@@ -155,7 +155,7 @@ export const Login = ({
               className="w-full"
               type="submit"
             >
-              Continue with Email
+              Continua con Email
             </Button>
           </form>
         </div>

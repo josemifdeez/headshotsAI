@@ -4,51 +4,107 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 0 0% 100%; /* White */
+    --foreground: 222.2 84% 4.9%; /* Default Dark Text */
+
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+
+    /* --- Brand Colors Applied --- */
+    --primary: 232 63% 41%; /* Brand Dark Blue: #2539B0 */
+    --primary-foreground: 0 0% 100%; /* White for contrast on dark blue */
+
+    --secondary: 210 40% 96.1%; /* Default Light Gray/Blue */
+    --secondary-foreground: 222.2 47.4% 11.2%; /* Default Dark Text */
+
+    --muted: 210 40% 96.1%; /* Default Light Gray/Blue */
+    --muted-foreground: 215.4 16.3% 46.9%; /* Default Medium Gray Text */
+
+    --accent: 231 93% 89%; /* Brand Light Blue: #CED5FE */
+    --accent-foreground: 222.2 47.4% 11.2%; /* Default Dark Text */
+
+    --destructive: 0 84.2% 60.2%; /* Default Red */
+    --destructive-foreground: 0 0% 100%; /* White */
+
+    --border: 214.3 31.8% 91.4%; /* Default Light Gray Border */
+    --input: 214.3 31.8% 91.4%; /* Default Light Gray Input Border */
+    --ring: 232 100% 66%; /* Brand Bright Blue: #4C66FE (for focus rings) */
+    /* --- End Brand Colors --- */
+
     --radius: 0.75rem;
   }
- 
+
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 222.2 84% 4.9%; /* Default Dark Background */
+    --foreground: 210 40% 98%; /* Default Light Text */
+
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+
+    /* --- Brand Colors Applied (Dark Mode) --- */
+    --primary: 232 100% 66%; /* Brand Bright Blue: #4C66FE */
+    --primary-foreground: 222.2 47.4% 11.2%; /* Dark Text for contrast on bright blue */
+
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
+
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
+
+    --destructive: 0 62.8% 30.6%; /* Default Dark Red */
     --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+
+    --border: 217.2 32.6% 17.5%; /* Default Dark Border */
+    --input: 217.2 32.6% 17.5%; /* Default Dark Input Border */
+    --ring: 232 100% 66%; /* Brand Bright Blue: #4C66FE (for focus rings) */
+     /* --- End Brand Colors (Dark Mode) --- */
   }
 }
 
 .sentence-case:first-letter {
   text-transform: uppercase;
+}
+
+@font-face {
+  font-family: "Euclid Circular B";
+  src: url("/fonts/euclid/EuclidCircularB-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Euclid Circular B";
+  src: url("/fonts/euclid/EuclidCircularB-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Euclid Circular B";
+  src: url("/fonts/euclid/EuclidCircularB-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    /* --- Aplicación de Letter Spacing --- */
+    @apply bg-background text-foreground;
+    /* tracking-[-0.04em]; */
+    /* --------------------------------- */
+    background-image: url('/pattern2.webp');
+    font-family: "Euclid Circular B", sans-serif;
+  }
 }

@@ -75,11 +75,11 @@ export default function ClientSideModelsList({
         <div className="flex flex-col gap-4 items-center">
           <FaImages size={64} className="text-gray-500" />
           <h1 className="text-2xl">
-            Get started by training your first model.
+            Empieza entrenando tu primer modelo.
           </h1>
           <div>
             <Link href={packsIsEnabled ? "/overview/packs" : "/overview/models/train/raw-tune"}>
-              <Button size={"lg"}>Train model</Button>
+              <Button size={"lg"}>Entrenar modelo</Button>
             </Link>
           </div>
         </div>
