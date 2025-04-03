@@ -1,16 +1,18 @@
 // src/app/layout.tsx
 import Footer from "@/components/Footer";
-// --- IMPORTA AMBOS NAVBARS Y EL SWITCHER ---              // Tu Navbar original
-import Navbar from "@/components/Navbar"; 
-// --- FIN IMPORTS ---
+import Navbar from "@/components/Navbar"; // Tu Navbar Server Component
 import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 import { Suspense } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from 'next';
 
+// 👇 AÑADE ESTA LÍNEA AQUÍ 👇
+export const dynamic = 'force-dynamic';
+// -------------------------- //
+
 export const metadata: Metadata = {
-  metadataBase: new URL('https://sesionesfotosia.pro'), // ¡Asegúrate que esta sea tu URL de producción!
+  metadataBase: new URL('https://sesionesfotosia.pro'),
   title: {
     default: "Sesiones Fotos IA",
     template: "%s | Sesiones Fotos IA",
@@ -20,32 +22,29 @@ export const metadata: Metadata = {
 
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  // --- Calcula (aproximadamente) la altura de la navbar sticky (NavbarModernV2) ---
-  // NavbarModernV2 tiene: h-14 (3.5rem = 56px) + py-3 (0.75rem*2 = 1.5rem = 24px) = 5rem (80px)
-  // Usaremos este valor para el padding-top del <main> para evitar solapamiento.
-  const stickyNavHeightClass = "pt-20"; // pt-20 en Tailwind es 5rem / 80px
+  // Dejamos tus cálculos de altura como estaban, aunque Navbar (la server component)
+  // puede que no sea sticky de la misma forma que tu NavbarModernV2 original.
+  // Asegúrate que el padding-top siga siendo relevante para el diseño actual.
+  const stickyNavHeightClass = "pt-20"; // Revisa si este valor es correcto para 'Navbar'
 
   return (
     <html lang="es">
-      <body className="min-h-screen flex flex-col bg-white"> {/* Añadido bg-white o tu color de fondo base */}
+      {/* Clases originales de body */}
+      <body className="min-h-screen flex flex-col bg-white">
 
-        {/* --- USA EL NAVBAR SWITCHER AQUÍ --- */}
-        {/* Ya no necesitas la <section> extra a menos que la uses para algo más */}
+        {/* Usas tu Navbar directamente */}
         <Suspense
           fallback={
-            // El fallback debería reflejar la altura de la *primera* navbar (Navbar)
-            // Navbar tiene py-4 (1rem*2 = 2rem) + contenido (aprox 40px logo + texto). Estimemos ~72px
-             <div className="flex w-full px-4 lg:px-10 py-4 items-center text-center gap-8 justify-start h-[72px] border-b" /> // Ajusta h-[...] si es necesario
+             <div className="flex w-full px-4 lg:px-10 py-4 items-center text-center gap-8 justify-start h-[72px] border-b" />
           }
-        ><Navbar/>
+        >
+          {/* Como Navbar ahora es dinámica por 'force-dynamic' en el layout, */}
+          {/* el Suspense podría no ser estrictamente necesario aquí, pero no hace daño */}
+          <Navbar />
         </Suspense>
-        {/* --- FIN NAVBAR SWITCHER --- */}
 
-        {/* Ajusta el padding de <main>:
-            - Elimina py-16 original.
-            - Añade padding-top igual a la altura de la navbar sticky (NavbarModernV2)
-            - Añade un padding-bottom si lo necesitas (p.ej., pb-16 o pb-24) */}
-        <main className={`flex flex-1 flex-col items-center ${stickyNavHeightClass} pb-16 md:pb-24`}> {/* Aplicado pt y pb */}
+        {/* Main con el padding-top que calculaste */}
+        <main className={`flex flex-1 flex-col items-center ${stickyNavHeightClass} pb-16 md:pb-24`}>
           {children}
         </main>
 
