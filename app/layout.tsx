@@ -1,8 +1,7 @@
 // src/app/layout.tsx
 import Footer from "@/components/Footer";
-// --- IMPORTA AMBOS NAVBARS Y EL SWITCHER ---
-import Navbar from "@/components/Navbar";              // Tu Navbar original
-import NavbarModernV2 from "@/components/NavbarPill"; // Tu Navbar pill // El componente switcher
+// --- IMPORTA AMBOS NAVBARS Y EL SWITCHER ---              // Tu Navbar original
+import Navbar from "@/components/Navbar"; 
 // --- FIN IMPORTS ---
 import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
@@ -38,8 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             // Navbar tiene py-4 (1rem*2 = 2rem) + contenido (aprox 40px logo + texto). Estimemos ~72px
              <div className="flex w-full px-4 lg:px-10 py-4 items-center text-center gap-8 justify-start h-[72px] border-b" /> // Ajusta h-[...] si es necesario
           }
-        >
-          <NavbarModernV2/>
+        ><Navbar/>
         </Suspense>
         {/* --- FIN NAVBAR SWITCHER --- */}
 
