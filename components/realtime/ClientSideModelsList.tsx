@@ -13,6 +13,9 @@ import { modelRowWithSamples } from "@/types/utils";
 import ModelsTable from "../ModelsTable";
 
 const packsIsEnabled = process.env.NEXT_PUBLIC_TUNE_TYPE === "packs";
+console.log("NEXT_PUBLIC_TUNE_TYPE:", process.env.NEXT_PUBLIC_TUNE_TYPE);
+console.log("packsIsEnabled:", packsIsEnabled);
+
 
 export const revalidate = 0;
 

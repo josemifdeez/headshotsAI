@@ -357,10 +357,10 @@ export default function TrainModelZoneHybrid({ packSlug }: { packSlug: string })
                                                     </FormItem>
                                                     <FormItem>
                                                         <FormControl>
-                                                            <RadioGroupItem value="woman" id="woman" className="peer sr-only" />
+                                                            <RadioGroupItem value="mujer" id="mujer" className="peer sr-only" />
                                                         </FormControl>
                                                         <Label
-                                                            htmlFor="woman"
+                                                            htmlFor="mujer"
                                                             className={`flex flex-col items-center justify-center rounded-md border-2 border-gray-200 bg-white p-4 transition-colors duration-200 ease-in-out cursor-pointer hover:bg-indigo-50 hover:border-[#4C66FE] peer-data-[state=checked]:border-[#2539B0] peer-data-[state=checked]:bg-[#CED5FE]/30 peer-data-[state=checked]:text-[#2539B0] [&:has([data-state=checked])]:ring-2 [&:has([data-state=checked])]:ring-[#4C66FE]/50 ${isLoading ? 'opacity-60 cursor-not-allowed' : ''}`}
                                                             >
                                                             <FaFemale className="mb-2 h-6 w-6" aria-hidden="true" />
