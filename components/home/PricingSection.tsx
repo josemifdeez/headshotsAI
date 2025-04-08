@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Check } from 'lucide-react';
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 
 // --- Datos de los Planes (Sin cambios) ---
 const pricingOptions = [

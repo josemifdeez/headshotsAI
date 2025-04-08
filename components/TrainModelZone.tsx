@@ -206,35 +206,48 @@ export default function TrainModelZoneHybrid({ packSlug }: { packSlug: string })
             });
 
             if (!response.ok) {
-                 let errorData = { message: `Error del servidor: ${response.status}` };
-                try {
-                    errorData = await response.json();
-                } catch (parseError) {
-                    console.error("Could not parse error response JSON:", parseError);
-                    errorData.message = response.statusText || errorData.message;
-                }
+                let errorData = { message: `Error del servidor: ${response.status}` };
+               try {
+                   errorData = await response.json();
+               } catch (parseError) {
+                   console.error("Could not parse error response JSON:", parseError);
+                   errorData.message = response.statusText || errorData.message;
+               }
 
-                const errorMessage = errorData.message || "Error desconocido al entrenar.";
-                console.error("Training API Error Status:", response.status);
-                console.error("Training API Error Body:", errorData);
+               const errorMessage = errorData.message || "Error desconocido al entrenar.";
+               console.error("Training API Error Status:", response.status);
+               console.error("Training API Error Body:", errorData);
 
-                const messageContent = errorMessage.includes("Not enough credits") ? (
-                     <div className="flex flex-col gap-3 items-start">
-                        <span>Créditos insuficientes para iniciar el entrenamiento.</span>
-                        <Button variant="link" size="sm" onClick={() => router.push("/get-credits")} className="p-0 h-auto text-[#4C66FE]">
-                            Obtener más créditos
-                        </Button>
-                    </div>
-                ) : (
-                    `Ocurrió un problema al iniciar el entrenamiento. (${errorMessage})`
-                );
+               // --- MODIFICATION START ---
+               const messageContent = errorMessage.includes("Not enough credits") ? (
+                    // Use a paragraph for the main message and adjust styling/spacing
+                    <div className="flex flex-col gap-1.5 items-start"> {/* Slightly smaller gap */}
+                       <p className="text-sm"> {/* Ensure consistent text size */}
+                          Créditos insuficientes para iniciar el entrenamiento.
+                       </p>
+                       <Button
+                           variant="link" // Keep it looking like a link
+                           size="sm"
+                           onClick={() => router.push("/get-credits")}
+                           // Style for better contrast/clarity within the destructive toast
+                           // Using white text with underline often works well on red backgrounds
+                           className="p-0 h-auto text-white underline font-medium hover:text-gray-200 focus-visible:text-gray-200 focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-red-600 rounded-sm"
+                        >
+                           Obtener más créditos
+                       </Button>
+                   </div>
+               ) : (
+                   // Keep the default error message format
+                   `Ocurrió un problema al iniciar el entrenamiento. (${errorMessage})`
+               );
+               // --- MODIFICATION END ---
 
-                toast({
-                    variant: "destructive",
-                    title: "❌ ¡Error al entrenar!",
-                    description: messageContent,
-                    duration: 7000,
-                });
+               toast({
+                   variant: "destructive", // This usually implies a reddish background
+                   title: "❌ ¡Error al entrenar!",
+                   description: messageContent, // Pass the JSX element here
+                   duration: 7000,
+               });
 
             } else {
                 toast({
@@ -538,7 +551,11 @@ export default function TrainModelZoneHybrid({ packSlug }: { packSlug: string })
                         <Button
                             type="submit"
                             size="lg"
-                            className="w-full max-w-sm group relative inline-flex items-center justify-center px-8 py-3 text-lg font-semibold tracking-wide text-white rounded-full bg-gradient-to-r from-[#4C66FE] to-[#2539B0] shadow-lg transition-all duration-300 ease-out hover:shadow-[0_0_20px_7px_rgba(76,102,254,0.3)] hover:from-[#5C76FF] hover:to-[#3A4CC0] active:scale-[0.96] active:shadow-[0_0_10px_5px_rgba(76,102,254,0.25)] active:from-[#4C66FE] active:to-[#2539B0] disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none disabled:scale-100 disabled:bg-gradient-to-r disabled:from-gray-400 disabled:to-gray-500"
+                            // --- MODIFICACIÓN AQUÍ ---
+                            // Se cambió px-8 a px-4 md:px-8 (padding más pequeño en móvil, original en md+)
+                            // Se cambió text-lg a text-base md:text-lg (fuente más pequeña en móvil, original en md+)
+                            className="w-full max-w-sm group relative inline-flex items-center justify-center px-4 md:px-8 py-3 text-base md:text-lg font-semibold tracking-wide text-white rounded-full bg-gradient-to-r from-[#4C66FE] to-[#2539B0] shadow-lg transition-all duration-300 ease-out hover:shadow-[0_0_20px_7px_rgba(76,102,254,0.3)] hover:from-[#5C76FF] hover:to-[#3A4CC0] active:scale-[0.96] active:shadow-[0_0_10px_5px_rgba(76,102,254,0.25)] active:from-[#4C66FE] active:to-[#2539B0] disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none disabled:scale-100 disabled:bg-gradient-to-r disabled:from-gray-400 disabled:to-gray-500"
+                            // --- FIN DE LA MODIFICACIÓN ---
                             disabled={isLoading || fileCountStatus !== 'success'}
                             aria-describedby={stripeIsConfigured ? "credit-notice" : undefined}
                         >

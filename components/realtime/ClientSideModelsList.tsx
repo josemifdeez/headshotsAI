@@ -13,8 +13,8 @@ import { modelRowWithSamples } from "@/types/utils";
 import ModelsTable from "../ModelsTable";
 
 const packsIsEnabled = process.env.NEXT_PUBLIC_TUNE_TYPE === "packs";
-console.log("NEXT_PUBLIC_TUNE_TYPE:", process.env.NEXT_PUBLIC_TUNE_TYPE);
-console.log("packsIsEnabled:", packsIsEnabled);
+// console.log("NEXT_PUBLIC_TUNE_TYPE:", process.env.NEXT_PUBLIC_TUNE_TYPE);
+// console.log("packsIsEnabled:", packsIsEnabled);
 
 
 export const revalidate = 0;
@@ -122,9 +122,7 @@ export default function ClientSideModelsList({
 
         case 'UPDATE': {
           let samplesData = payload.new?.samples || [];
-           // **Optimización clave**: Solo buscar samples si NO vienen en el payload Y el modelo existe.
-           // Podrías incluso decidir NO volver a buscar samples en un UPDATE si ya los tenías,
-           // a menos que una lógica específica requiera actualizarlos.
+
           const existingModelIndex = models.findIndex(m => m.id === payload.new?.id);
           if (existingModelIndex !== -1 && payload.new?.id && !payload.new.samples) {
                // console.log(`Fetching samples for updated model ${payload.new.id}`); // Debug
@@ -157,8 +155,9 @@ export default function ClientSideModelsList({
           // Evento no manejado
           break;
       }
-      if (updatedModelsList !== models) { // Comprobación de referencia (puede no ser suficiente si el contenido cambia pero la ref no)
-
+      // Comprobación más robusta (comparación profunda o por ID si es suficiente)
+      // JSON.stringify es simple pero puede ser ineficiente para objetos grandes
+      if (JSON.stringify(updatedModelsList) !== JSON.stringify(models)) {
           setModels(updatedModelsList); // Actualizar estado
       }
 
@@ -167,10 +166,7 @@ export default function ClientSideModelsList({
         // Considera mostrar un mensaje al usuario si falla la actualización
     }
 
-  // Usamos `models` como dependencia porque la lógica interna depende del estado actual
-  // para evitar duplicados (en INSERT) o para mapear/filtrar (en UPDATE/DELETE).
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [supabase, models]); // <- Dependencia de 'models' es necesaria aquí por la lógica interna
+  }, [supabase, models]); // <- Dependencia de 'models' es necesaria aquí
 
 
   useEffect(() => {
@@ -180,7 +176,7 @@ export default function ClientSideModelsList({
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "models" },
-        // Pasamos la función memoizada o definida con useCallback
+        // Pasamos la función de manejo
         (payload) => handleRealtimeUpdate(payload)
       )
       .subscribe((status, err) => {
@@ -196,8 +192,8 @@ export default function ClientSideModelsList({
          console.error("Error removing Supabase channel:", err);
       });
     };
-  // Pasamos handleRealtimeUpdate como dependencia. Gracias a useCallback,
-  // esta referencia solo cambiará si `supabase` o `models` cambian.
+  // handleRealtimeUpdate ahora depende de `models`, así que el efecto se re-ejecuta si `models` cambia.
+  // Esto es correcto para que handleRealtimeUpdate siempre tenga la última versión de `models` en su closure.
   }, [supabase, handleRealtimeUpdate]);
 
   // --- Renderizado ---
@@ -225,7 +221,6 @@ export default function ClientSideModelsList({
             </div>
             {/* Botón con Link */}
             <Link href={packsIsEnabled ? "/overview/packs" : "/overview/models/train/raw-tune"} className="w-full sm:w-fit shrink-0">
-               {/* --- BOTÓN CON ESTILO ACTUALIZADO --- */}
                <Button
                  size={"lg"}
                  className="group relative w-full sm:w-auto inline-flex items-center justify-center px-8 py-3 font-semibold text-lg tracking-wide text-white rounded-full bg-gradient-to-r from-[#4C66FE] to-[#2539B0] shadow-md transition-all duration-300 ease-out hover:shadow-[0_0_15px_5px_rgba(76,102,254,0.25)] hover:from-[#5C76FF] hover:to-[#3A4CC0] active:scale-[0.97] active:shadow-[0_0_8px_4px_rgba(76,102,254,0.2)] active:from-[#4C66FE] active:to-[#2539B0]"
@@ -234,7 +229,6 @@ export default function ClientSideModelsList({
                 <Plus className="mr-2 h-5 w-5 transition-transform duration-300 ease-out group-hover:rotate-90"/>
                 Entrenar Nuevo Modelo
               </Button>
-              {/* --- FIN BOTÓN CON ESTILO ACTUALIZADO --- */}
             </Link>
           </motion.div>
 
@@ -246,7 +240,7 @@ export default function ClientSideModelsList({
         </motion.div>
 
       ) : (
-         // Estado Vacío (sin cambios lógicos)
+         // Estado Vacío
         <motion.div
           className="flex flex-col items-center text-center gap-6 py-16 md:py-24 px-6 rounded-xl bg-gradient-to-br from-white to-[#F0F5FF]/60 border border-[#CED5FE]/50 shadow-sm max-w-3xl mx-auto"
           variants={emptyStateVariants}
@@ -264,16 +258,20 @@ export default function ClientSideModelsList({
           </motion.p>
           <motion.div variants={emptyStateChildVariants} className="mt-4">
             <Link href={packsIsEnabled ? "/overview/packs" : "/overview/models/train/raw-tune"}>
-               {/* --- BOTÓN CON ESTILO ACTUALIZADO (Estado Vacío) --- */}
+               {/* --- BOTÓN CON ESTILO MODIFICADO (Estado Vacío) --- */}
                <Button
                  size={"lg"}
-                 className="group relative inline-flex items-center justify-center px-8 py-3 font-semibold text-lg tracking-wide text-white rounded-full bg-gradient-to-r from-[#4C66FE] to-[#2539B0] shadow-md transition-all duration-300 ease-out hover:shadow-[0_0_15px_5px_rgba(76,102,254,0.25)] hover:from-[#5C76FF] hover:to-[#3A4CC0] active:scale-[0.97] active:shadow-[0_0_8px_4px_rgba(76,102,254,0.2)] active:from-[#4C66FE] active:to-[#2539B0]"
+                 // --- MODIFICACIÓN APLICADA AQUÍ ---
+                 // Se cambió px-8 a px-4 md:px-8
+                 // Se cambió text-lg a text-base md:text-lg
+                 className="group relative inline-flex items-center justify-center px-4 md:px-8 py-3 font-semibold text-base md:text-lg tracking-wide text-white rounded-full bg-gradient-to-r from-[#4C66FE] to-[#2539B0] shadow-md transition-all duration-300 ease-out hover:shadow-[0_0_15px_5px_rgba(76,102,254,0.25)] hover:from-[#5C76FF] hover:to-[#3A4CC0] active:scale-[0.97] active:shadow-[0_0_8px_4px_rgba(76,102,254,0.2)] active:from-[#4C66FE] active:to-[#2539B0]"
+                 // --- FIN DE LA MODIFICACIÓN ---
                >
                 Entrenar Modelo Ahora
                 {/* Icono ArrowRight con su animación específica */}
                 <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 ease-out group-hover:translate-x-1" />
               </Button>
-              {/* --- FIN BOTÓN CON ESTILO ACTUALIZADO --- */}
+              {/* --- FIN BOTÓN CON ESTILO MODIFICADO --- */}
             </Link>
           </motion.div>
         </motion.div>

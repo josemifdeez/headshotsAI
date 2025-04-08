@@ -4,20 +4,20 @@ import { FaFemale, FaMale, FaRainbow } from "react-icons/fa";
 
 export function ModelTypeSelector() {
   return (
-    <RadioGroup defaultValue="man" className="grid grid-cols-3 gap-4">
+    <RadioGroup defaultValue="Hombre" className="grid grid-cols-3 gap-4">
       <div>
         <RadioGroupItem
-          value="man"
-          id="man"
+          value="Hombre"
+          id="Hombre"
           className="peer sr-only"
-          aria-label="man"
+          aria-label="Hombre"
         />
         <Label
-          htmlFor="man"
+          htmlFor="Hombre"
           className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
         >
           <FaMale className="mb-3 h-6 w-6" />
-          Man
+          Hombre
         </Label>
       </div>
 

@@ -73,10 +73,11 @@ export default function ExplainerSectionModernFinalAdjust() {
                 <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900">
                     Cómo funciona
                 </h2>
+                {/* La barra usa tus colores de marca, lo cual es coherente */}
                 <div className="mt-4 h-1.5 w-24 mx-auto bg-gradient-to-r from-[#4C66FE] to-[#2539B0] rounded-full"></div>
             </motion.div>
 
-            {/* --- Contenedor de Pasos (sin cambios) --- */}
+            {/* --- Contenedor de Pasos --- */}
             <motion.div
                 className="relative flex flex-col gap-20 md:gap-28"
                 variants={containerVariants}
@@ -89,36 +90,39 @@ export default function ExplainerSectionModernFinalAdjust() {
                     const isOdd = index % 2 !== 0;
 
                     return (
-                        // --- Contenedor de CADA Paso (sin cambios) ---
                         <motion.div
                             key={step.stepNumber}
                             className={`relative flex flex-col md:flex-row items-center gap-10 md:gap-16 w-full ${isOdd ? 'md:flex-row-reverse' : ''}`}
                             variants={itemVariants}
                         >
-                            {/* --- Número de Fondo Lateral (sin cambios) --- */}
+                             {/* --- Número de Fondo Lateral (AZUL CLARO DE MARCA, OPACIDAD AJUSTADA) --- */}
                              <div
                                 className={`
                                     absolute inset-y-0 z-0 pointer-events-none user-select-none
-                                    flex items-center
+                                    hidden md:flex items-center {/* <-- OCULTO EN MÓVIL, VISIBLE DESDE MD */}
                                     w-auto
                                     ${isOdd ? 'left-full ml-4 md:ml-6 justify-start' : 'right-full mr-4 md:mr-6 justify-end'}
                                 `}
                                 aria-hidden="true"
                             >
                                 <span className={`
-                                    text-7xl md:text-8xl lg:text-9xl font-black text-indigo-200
-                                    opacity-50 leading-none whitespace-nowrap
+                                    font-sans {/* <-- Fuente Sans por defecto */}
+                                    text-7xl md:text-8xl lg:text-9xl font-black text-[#CED5FE] {/* <-- CAMBIO: Azul claro de marca */}
+                                    opacity-60 {/* <-- CAMBIO: Opacidad ajustada */}
+                                    leading-none whitespace-nowrap
                                 `}>
                                     {step.stepNumber}
                                 </span>
                             </div>
 
-                            {/* Columna de Texto (sin cambios) */}
+                            {/* Columna de Texto */}
                             <div className="relative z-10 flex-1 w-full">
                                 <div className="flex items-start gap-4 md:gap-5">
                                     <div className="relative flex-shrink-0">
-                                        <div className="flex items-center justify-center w-11 h-11 rounded-full bg-gradient-to-br from-blue-100 to-indigo-200 shadow-md">
-                                            <Icon className="w-6 h-6 text-indigo-600" />
+                                        {/* --- FONDO DEL ICONO (GRADIENTE AZUL ACTUALIZADO) --- */}
+                                        <div className="flex items-center justify-center w-11 h-11 rounded-full bg-gradient-to-br from-blue-100 to-[#CED5FE] shadow-md"> {/* <-- CAMBIO: Gradiente a azul claro de marca */}
+                                            {/* --- ICONO (AZUL OSCURO DE MARCA) --- */}
+                                            <Icon className="w-6 h-6 text-[#2539B0]" /> {/* <-- CAMBIO: Azul oscuro de marca */}
                                         </div>
                                     </div>
                                     <div className="flex-1 space-y-2">
@@ -130,13 +134,13 @@ export default function ExplainerSectionModernFinalAdjust() {
                                 </div>
                             </div>
 
-                            {/* Columna de Imagen (z-10) */}
+                            {/* Columna de Imagen (sin cambios aquí) */}
                             <div className="relative z-10 flex-1 w-full mt-8 md:mt-0 flex justify-center">
-                                {/* Glow Effect Div (sin cambios) */}
+                                {/* Glow effect usa tus colores, lo cual es bueno */}
                                 <div
                                     className="absolute inset-[-15px] md:inset-[-20px] rounded-full opacity-60 blur-xl animate-pulse-slow pointer-events-none"
                                     style={{
-                                        backgroundImage: `radial-gradient(circle, rgba(76, 102, 254, 0.4), rgba(37, 57, 176, 0.2), transparent 70%)`
+                                        backgroundImage: `radial-gradient(circle, rgba(76, 102, 254, 0.4), rgba(37, 57, 176, 0.2), transparent 70%)` /* Usa #4C66FE y #2539B0 */
                                     }}
                                     aria-hidden="true"
                                 />
@@ -146,13 +150,10 @@ export default function ExplainerSectionModernFinalAdjust() {
                                     alt={step.altText}
                                     width={500}
                                     height={350}
-                                    // ---- CHANGE IS HERE: Removed border, border-gray-100, p-1.5 ----
                                     className="relative z-10 rounded-xl object-cover w-full max-w-lg h-auto shadow-xl transform transition-transform duration-300 ease-out"
-                                    // ---- Consider removing shadow-xl too if needed ----
-                                    // className="relative z-10 rounded-xl object-cover w-full max-w-lg h-auto transform transition-transform duration-300 ease-out"
                                     whileHover={{
                                         scale: 1.04,
-                                        boxShadow: '0 20px 40px -10px rgba(76, 102, 254, 0.3)'
+                                        boxShadow: '0 20px 40px -10px rgba(76, 102, 254, 0.3)' /* Sombra usa #4C66FE */
                                     }}
                                     transition={{ type: "spring", stiffness: 200, damping: 15 }}
                                     onError={(e) => {

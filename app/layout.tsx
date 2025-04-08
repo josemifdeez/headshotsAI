@@ -12,7 +12,7 @@ export const dynamic = 'force-dynamic';
 // -------------------------- //
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://sesionesfotosia.pro'),
+  metadataBase: new URL('https://sesionesfotosia.com'),
   title: {
     default: "Sesiones Fotos IA",
     template: "%s | Sesiones Fotos IA",
@@ -25,12 +25,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   // Dejamos tus cálculos de altura como estaban, aunque Navbar (la server component)
   // puede que no sea sticky de la misma forma que tu NavbarModernV2 original.
   // Asegúrate que el padding-top siga siendo relevante para el diseño actual.
-  const stickyNavHeightClass = "pt-20"; // Revisa si este valor es correcto para 'Navbar'
+  const stickyNavHeightClass = ""; // Revisa si este valor es correcto para 'Navbar'
 
   return (
     <html lang="es">
       {/* Clases originales de body */}
-      <body className="min-h-screen flex flex-col bg-white">
+      <body className="min-h-screen flex flex-col bg-white overflow-x-hidden lg:overflow-x-visible">
+
 
         {/* Usas tu Navbar directamente */}
         <Suspense

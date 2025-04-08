@@ -46,8 +46,6 @@ export default async function ModelDetailPage({ params }: { params: { id: string
     .select("*")
     .eq("modelId", model.id);
 
-  // console.log('Estado actual del modelo en Server Component:', model.status);
-
   return (
     <div className="w-full h-full p-4 md:p-6">
       {/* Cabecera: Margen inferior mb-16 mantenido */}
@@ -86,24 +84,20 @@ export default async function ModelDetailPage({ params }: { params: { id: string
 
           {/* 2b. DIV EXTRA contenedor del Badge */}
           <div>
-            {/* --- BADGE SIN HOVER IMPLÍCITO --- */}
             <Badge
               className={`
                 text-xs font-medium px-3 py-1 rounded-full
                 flex items-center gap-1.5
                 justify-center
-                border  /* Mantenemos borde base */
-                /* Eliminada transition-colors para evitar cualquier suavizado de hover no deseado */
+                border  
                 ${ // Lógica condicional de estilos
                   model.status === "finished"
-                    // Estilo Completado: Sin transiciones ni hover explícito
-                    ? "bg-green-100 text-green-700 border-green-300 shadow-sm"
+                    ? "bg-green-100 text-green-700 border-green-300 shadow-sm hover:bg-green-100" // <-- Añadido hover:bg-green-100
                     : model.status === "processing" || model.status === "starting"
-                    // Mantenemos pulso para procesando, quitamos transición general
-                    ? "bg-yellow-100 text-yellow-800 border-yellow-200 animate-pulse"
+                    ? "bg-yellow-100 text-yellow-800 border-yellow-200 hover:bg-yellow-100" // <-- Añadido hover:bg-yellow-100
                     : model.status === "failed"
-                    ? "bg-red-100 text-red-800 border-red-200"
-                    : "bg-muted text-muted-foreground border-border"
+                    ? "bg-red-100 text-red-800 border-red-200 hover:bg-red-100" // <-- Añadido hover:bg-red-100
+                    : "bg-muted text-muted-foreground border-border hover:bg-muted"
                 }
               `}
             >
@@ -123,7 +117,7 @@ export default async function ModelDetailPage({ params }: { params: { id: string
                 {model.status === "finished"
                   ? "Completado"
                   : model.status === "processing"
-                  ? "training"
+                  ? "En proceso"
                   : model.status
                 }
               </span>
@@ -132,7 +126,6 @@ export default async function ModelDetailPage({ params }: { params: { id: string
         </div> {/* Fin grupo título+badge */}
       </div> {/* Fin cabecera */}
 
-      {/* Componente Cliente (Sin cambios aquí) */}
       <ClientSideModel
          samples={samples ?? []}
          serverModel={model}

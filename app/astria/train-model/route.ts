@@ -185,6 +185,7 @@ export async function POST(request: Request) {
       tune: {
         title: name,
         name: type,
+        branch: astriaTestModeIsOn ? "fast" : "sd15",
         callback: trainWebhookWithParams,
         prompt_attributes: {
           callback: promptWebhookWithParams,
