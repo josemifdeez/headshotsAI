@@ -141,7 +141,7 @@ export async function POST(request: Request) {
           const resend = new Resend(resendApiKey);
           const emailPayload = {
             // --- ¡¡¡IMPORTANTE!!! VERIFICAR ESTE VALOR EN LOS LOGS ---
-            from: "sesionesfotosia@sesionesfotosia.com",
+            from: '"Sesiones Fotos IA" <sesionesfotosia@sesionesfotosia.com>',
             // --- FIN IMPORTANTE ---
             to: user.email,
             subject: "¡Tu modelo de IA está listo!",

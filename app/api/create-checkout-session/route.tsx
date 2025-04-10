@@ -97,12 +97,6 @@ export async function POST(request: Request) {
       // Permite que el usuario introduzca códigos de descuento creados en Stripe
       allow_promotion_codes: true,
 
-      // --- Opcionales Adicionales (Descomentar si se necesitan) ---
-      // billing_address_collection: 'required', // Solicitar dirección de facturación
-      // phone_number_collection: { enabled: true }, // Solicitar número de teléfono
-      // metadata: { // Datos extra que quieres recibir en el webhook
-      //   userId: user.id // Redundante si usas client_reference_id, pero como ejemplo
-      // }
     });
 
     if (session.url) {

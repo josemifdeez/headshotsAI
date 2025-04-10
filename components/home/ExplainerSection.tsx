@@ -56,7 +56,7 @@ const itemVariants = {
     },
 };
 
-export default function ExplainerSectionModernFinalAdjust() {
+export default function ExplainerSection() {
     return (
         <div
             id="como-funciona"
