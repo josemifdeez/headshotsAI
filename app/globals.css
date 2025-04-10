@@ -1,3 +1,5 @@
+/* globals.css */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -67,10 +69,12 @@
   }
 }
 
+/* Utilidad para capitalizar primera letra (ya la tenías) */
 .sentence-case:first-letter {
   text-transform: uppercase;
 }
 
+/* Definiciones de Fuentes (ya las tenías) */
 @font-face {
   font-family: "Euclid Circular B";
   src: url("/fonts/euclid/EuclidCircularB-Regular.woff2") format("woff2");
@@ -95,23 +99,38 @@
   font-display: swap;
 }
 
+/* Reglas base (ya las tenías) */
 @layer base {
   * {
     @apply border-border;
   }
   body {
-    /* --- Aplicación de Letter Spacing --- */
     @apply bg-background text-foreground;
-    /* tracking-[-0.04em]; */
-    /* --------------------------------- */
+    /* tracking-[-0.04em]; */ /* (Comentado como en tu original) */
     background-image: url('/pattern2.webp');
     font-family: "Euclid Circular B", sans-serif;
   }
 }
 
-/* Anti overflow horizontal */
+/* --- Inicio: Solución Scroll Móvil para ReactCompareSlider --- */
+/* Estas reglas se añaden para mejorar la usabilidad en táctil */
+
+/* Contenedor principal del slider */
+.compare-slider-container {
+  display: block; /* Asegura que tenga layout de bloque */
+  /* Por defecto, permite el scroll vertical en táctil */
+  touch-action: pan-y !important;;
+}
+
+/* Handle (mango) del slider */
+.compare-slider-handle {
+  /* Asegura que el handle SÍ permita el arrastre horizontal */
+  touch-action: pan-x !important;;
+  /* Alternativa si pan-x no funciona: touch-action: none; */
+}
+
 html, body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* Importante */
+  overflow-x: hidden;
 }

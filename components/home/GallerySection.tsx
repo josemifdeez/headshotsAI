@@ -79,67 +79,66 @@ export default function ExamplesGallerySection() {
                 {examplesData.map((example) => (
                     <motion.div
                         key={example.id}
-                        // El contenedor de la tarjeta ya tiene relative, lo que es bueno.
                         className="relative group bg-white rounded-2xl shadow-lg border border-gray-200 transition-all duration-300 ease-out hover:shadow-xl hover:scale-[1.03]"
                         variants={itemVariants}
                     >
+                        {/* **** CLASE AÑADIDA AL SLIDER **** */}
                         <ReactCompareSlider
+                            // 👇 Clase añadida para aplicar touch-action
+                            className="compare-slider-container"
                             handle={
+                                // 👇 Clase añadida al handle para aplicar touch-action específico
                                 <div
                                     style={sliderStyles.handle}
-                                    className="w-11 h-11 bg-gradient-to-r from-[#4C66FE] to-[#2539B0] rounded-full flex items-center justify-center cursor-ew-resize"
+                                    // 👇 Añade 'compare-slider-handle' a las clases existentes
+                                    className="compare-slider-handle w-11 h-11 bg-gradient-to-r from-[#4C66FE] to-[#2539B0] rounded-full flex items-center justify-center cursor-ew-resize"
                                 >
-                                     {/* Icono del handle */}
+                                     {/* Icono */}
                                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="white" className="w-5 h-5 transform rotate-90">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
                                      </svg>
                                 </div>
                             }
                             itemOne={
-                                // Contenedor para itemOne: relative, overflow-hidden y z-0
+                                // Contenedor itemOne (con z-0)
                                 <div className="relative w-full h-full overflow-hidden z-0">
                                     <ReactCompareSliderImage
                                         src={example.beforeSrc}
                                         alt={`Antes - ${example.altText}`}
-                                        className="block w-full h-full object-cover" // block es importante
+                                        className="block w-full h-full object-cover"
                                     />
-                                    {/* Badge "Antes": absolute, sin z-index explícito aquí */}
                                     <div className="absolute top-3 left-3 pointer-events-none">
-                                        <span className="inline-block px-3 py-1.5 rounded-full bg-[#CED5FE] text-[#2539B0] text-xs font-semibold shadow-md"> {/* Estilos ajustados como en la imagen */}
+                                        <span className="inline-block px-3 py-1.5 rounded-full bg-[#CED5FE] text-[#2539B0] text-xs font-semibold shadow-md">
                                             Antes
                                         </span>
                                     </div>
                                 </div>
                             }
                             itemTwo={
-                                // Contenedor para itemTwo: relative, overflow-hidden y z-10
+                                // Contenedor itemTwo (con z-10)
                                 <div className="relative w-full h-full overflow-hidden z-10">
                                     <ReactCompareSliderImage
                                         src={example.afterSrc}
                                         alt={`Después - ${example.altText}`}
-                                        className="block w-full h-full object-cover" // block es importante
+                                        className="block w-full h-full object-cover"
                                     />
-                                    {/* Badge "Después": absolute y z-10 para asegurar que está sobre su propia imagen si hay solapamiento interno */}
                                      <div className="absolute top-3 right-3 z-10 pointer-events-none">
-                                         <span className="inline-block px-3 py-1.5 rounded-full bg-[#2539B0] text-white text-xs font-semibold shadow-md"> {/* Estilos ajustados como en la imagen */}
+                                         <span className="inline-block px-3 py-1.5 rounded-full bg-[#2539B0] text-white text-xs font-semibold shadow-md">
                                              Después
                                          </span>
                                      </div>
                                 </div>
                             }
                             style={{
-                                // Estilos en línea para el slider
+                                // Estilos en línea del slider
                                 width: '100%',
-                                height: 'auto', // O una altura fija si la necesitas
-                                aspectRatio: '1 / 1', // Mantiene la proporción cuadrada
+                                height: 'auto',
+                                aspectRatio: '1 / 1',
                                 '--divider-color': sliderStyles.divider.backgroundColor,
                                 '--divider-width': sliderStyles.divider.width,
-                                // Aplicamos el redondeo directamente al slider
-                                // Usamos calc() por si el border-gray-200 (1px) afecta visualmente
-                                borderRadius: 'calc(1rem - 1px)', // Coincide con rounded-2xl (1rem) del padre
-                                overflow: 'hidden', // ¡Crucial! El slider debe recortar su contenido
+                                borderRadius: 'calc(1rem - 1px)',
+                                overflow: 'hidden',
                             } as React.CSSProperties}
-                            // No se necesita className="w-full" aquí si ya está en style
                         />
                     </motion.div>
                 ))}
